@@ -1,23 +1,29 @@
-'use client'
+"use client";
 import { useCallback, useEffect } from "react";
 import { Unity, useUnityContext } from "react-unity-webgl";
 
 export default function Home() {
   const { unityProvider, sendMessage, loadingProgression, isLoaded } = useUnityContext({
-    loaderUrl: "Build/Plinko.loader.js",
-    dataUrl: "Build/Plinko.data",
-    frameworkUrl: "Build/Plinko.framework.js",
-    codeUrl: "Build/Plinko.wasm",
+    loaderUrl: "Build/public.loader.js",
+    dataUrl: "Build/public.data",
+    frameworkUrl: "Build/public.framework.js",
+    codeUrl: "Build/public.wasm",
     streamingAssetsUrl: "StreamingAssets",
   });
-  // const handleClickLoadButton = useCallback(() => {
-  //   sendMessage("AssetManager", "LoadDataPreview", "https://66b18a7b1ca8ad33d4f45f7d.mockapi.io/game/api/WheelOfFortune/1");
-  // }, [isLoaded]);
-  // useEffect(()=>{
-  //   window.addEventListener("message", (event)=>{
-  //     handleClickLoadButton();
-  //   })
-  // }, [handleClickLoadButton])
+  const handleClickLoadButton = useCallback(() => {
+    let jsonString = "{\"background\":\"https://i.ibb.co/Y7jr2Kx/Wheel-APIBG.png\",\"ball\":\"https://i.postimg.cc/6qrz9L4z/Basket-Inu.png\",\"playButton\":[\"https://i.ibb.co/R6cktKJ/Play-Button.png\",\"https://i.ibb.co/R6cktKJ/Play-Button.png\"],\"rewardFieldImage\":[\"https://i.ibb.co/VSsmrWP/Wall.png\",\"https://i.ibb.co/pPKb6G0/Wall2.png\"],\"id\":\"1\"}";
+    sendMessage("AssetManager", "LoadAllTexture", jsonString);
+  }, [isLoaded]);
+  useEffect(()=>{
+    window.addEventListener("message", (event)=>{
+      console.log(event);
+      handleClickLoadButton();
+    })
+    return ()=>{
+      window.removeEventListener("message", handleClickLoadButton);
+    }
+  }, [handleClickLoadButton])
+
 
   return (
     <main className="flex min-h-screen justify-center items-center gap-10">
